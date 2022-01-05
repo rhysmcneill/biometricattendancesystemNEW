@@ -1,0 +1,96 @@
+/* ABOUT US SECTION CSS */
+body {
+    margin: 0;
+    font-family: 'Archivo', 'SansSerif';
+}
+.aboutus-section {
+    width: 100vw; /* vw = variable width - helps responsiveness */
+    height: 100vh;
+    text-align: center;
+    background-color: #edf6ff;
+}
+
+.wrapper-how{
+    height: 56%;
+    width: 70%;
+    margin: 0 auto;
+    justify-content: center;
+    background: #33ccff ;
+    border-radius: 15px 15px 15px 15px;
+    border: 1px dashed black;
+
+ }
+.headerTitle{
+    padding-top: 80px;
+    margin: auto;
+    line-height: 50px;
+}
+
+.headerTitle h1{
+    font-size: 30px;
+}
+#title{
+    display: inline-block;
+    padding-bottom: 5px;
+    position: relative;
+     font-weight: 400;
+}
+
+#title::before{
+    content: "";
+    position: absolute;
+    width: 50%;
+    height: 1px;
+    bottom: 0;
+    left: 25%;
+    border-bottom: 4px solid black;
+}
+
+.headerText{
+    padding-top: 40px;
+    padding-left: 100px;
+    padding-right: 100px;
+    padding-bottom: 30px;
+    font-size: 20px;
+    color: #8C8C8C;
+    margin: auto;
+    text-align: center;
+}
+
+.sub-container{
+    max-width: 1000px;
+    padding: 50px 40px;
+    margin: auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.services-container{
+    margin: 10px;
+    padding: 19px;
+    max-width: 31%;
+    background-color: ghostwhite;
+    border-radius: 15px 15px 15px 15px;
+    box-shadow: 0 20px 25px rgba(0,0,0,0.15);
+}
+
+.services-container img{
+    width: 100px;
+    height: 100px;
+}
+
+.service{
+    text-decoration: underline;
+    padding-bottom: 17px;
+    font-weight: bold;
+    font-size: 16px;
+    text-transform: uppercase;
+    color: #4e4e4e;
+}
+
+.about-service{
+    margin: 10px 0;
+    font-weight: lighter;
+    color: #4e4e4e;
+}

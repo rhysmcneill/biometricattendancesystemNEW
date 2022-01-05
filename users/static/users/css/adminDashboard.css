@@ -1,0 +1,25 @@
+body {
+    margin: 0;
+    font-family: 'Archivo', 'SansSerif';
+    background: #edf6ff;
+}
+
+#trainmodel{
+    position: absolute;
+    right: 700px;
+}
+
+#reports{
+    position: relative;
+    right: 50px;
+}
+
+#regEmployee{
+    position: absolute;
+    left: 80px;
+}
+h2 {
+    text-align: center;
+}
+
+

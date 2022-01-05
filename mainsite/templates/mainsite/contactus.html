@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<script src='https://api.mapbox.com/mapbox-gl-js/v2.5.1/mapbox-gl.js'></script>
+<link href='https://api.mapbox.com/mapbox-gl-js/v2.5.1/mapbox-gl.css' rel='stylesheet' />
+<link rel="stylesheet" href="../../static/mainsite/css/contactus.css">
+        <section class="contact">
+                <div class="container">
+                    <div class="heading text-center">
+                        {% if message_name %}
+                        <h2>Thanks for getting in touch, {{ message_name }}!</h2>
+                        <p>We have recieved your query and are currently processing it - we will be in touch shortly.</p>
+                        {% else %}
+                        <h2 id="contactusHeader">Contact Us
+                            <span> ! </span></h2>
+                        <p>Get in touch with us for any queries or general questions,
+                            <br>we will promptly respond. </p>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="contactdetails-title">
+                                <h3>Contact details</h3>
+                                <p>Further details to get in touch with our team</p>
+                            </div>
+                            <div class="content">
+                                <!-- Phone Details-->
+                                <div class="info">
+                                    <i class="fas fa-mobile-alt"></i>
+                                    <h4 class="d-inline-block">PHONE :
+                                        <br>
+                                        <span>+44 7429123234 , 028 91436234</span></h4>
+                                </div>
+                                <!-- Email Details -->
+                                <div class="info">
+                                    <i class="far fa-envelope"></i>
+                                    <h4 class="d-inline-block">EMAIL :
+                                        <br>
+                                        <span>rhysmcneill7@hotmail.co.uk</span></h4>
+                                </div>
+                                <!-- Company Address-->
+                                <div class="info">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <h4 class="d-inline-block">ADDRESS :<br>
+                                        <span>8 Bloomfield Place, Bangor, BT20 3UT</span></h4>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-7">
+
+                            <form action="{% url "contactus" %}" method="POST" id="form-identifier">
+                                {%  csrf_token %}
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control" placeholder="Name" required="required"                                              name="message_name">
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <input type="email" class="form-control" placeholder="Email" required="required"                                            name="message_email">
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <input type="text" class="form-control" placeholder="Subject" required="required"                                           name="message_subject">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <textarea class="form-control" rows="5" id="comment" placeholder="Message"                                                    required="required" name="message"></textarea>
+                                </div>
+                                <button class="btn btn-block" type="submit">Send Now!</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            <div id='map' style='width: 100%; height: 500px;'></div>
+                <script>
+                    // MapBox GL JS API access
+                    mapboxgl.accessToken = 'pk.eyJ1Ijoicmh5c21jbiIsImEiOiJja3Vtd3ZxbTEwZXp5MnBvYWYxZW0zbnFzIn0.NffLxltORA0KljUbGwlM_w';
+                    const map = new mapboxgl.Map({
+                        container: 'map', // container ID
+                        style: 'mapbox://styles/mapbox/streets-v11', // style URL
+                        center: [-5.662039,54.652235], // starting position [lng, lat]
+                        zoom: 14 // starting zoom
+                    });
+                    const marker = new mapboxgl.Marker()
+                        .setLngLat([-5.662039,54.652235])
+                        .addTo(map);
+                </script>
+        </section>
+    {% endif %}
+{% endblock %}

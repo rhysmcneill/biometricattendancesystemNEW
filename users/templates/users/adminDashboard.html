@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <link rel="stylesheet" href="../../static/users/css/adminDashboard.css">
+    <div class="container "><br />
+        <legend class="border-bottom mb-4" style="color: black;"><h1>{{ user.username }}'s Dashboard</h1></legend><br /><br /><br />
+        <br />
+        <div class="row">
+
+            <div class="col-md-4">
+                <a href="{% url 'register' %}">
+                    <img class="img-responsive" src="../../static/users/images/addemployee.png" alt="register employee"                         height="300px" width="300px">
+                </a>
+                <h2 id="regEmployee">Register an Employee</h2>
+            </div>
+            <div class="col-md-4">
+                <a  href="#">
+                    <img class="img-responsive" src="../../static/users/images/traindata.png" alt="register employee"                           height="300px" width="300px">
+                </a>
+                <h2 id="trainmodel">Train Model</h2>
+            </div>
+            <div class="col-md-4">
+                <a class="thumbnail" href="#">
+                    <img class="img-responsive" src="../../static/users/images/adminReports.png" alt="view reports"                             height="300px" width="300px">
+                </a>
+                <h2 id="reports">View Reports</h2>
+            </div>
+        </div>
+    </div>
+{% endblock %}

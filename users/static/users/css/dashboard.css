@@ -1,0 +1,29 @@
+body {
+    margin: 0;
+    font-family: 'Archivo', 'SansSerif';
+    background: #edf6ff;
+}
+
+#addpic {
+    position: relative;
+    left: 10px;
+}
+
+#empreports{
+    position: relative;
+}
+
+#addpicturetitle{
+    position: relative;
+    left: 62px;
+    top: 23px;
+}
+
+#empreportstitle{
+    position: relative;
+    left: 30px;
+}
+
+
+
+

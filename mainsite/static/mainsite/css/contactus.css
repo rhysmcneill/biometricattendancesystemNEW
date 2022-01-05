@@ -1,0 +1,104 @@
+body {
+  margin: 0;
+  font-family: 'Archivo', 'SansSerif';
+  background: #edf6ff;
+}
+
+.contact {
+  padding-top: 130px;
+}
+
+.contact .heading h2 {
+  font-size: 30px;
+  font-weight: 700;
+  margin: 0;
+  padding: 0;
+
+}
+
+#contactusHeader{
+    display: inline-block;
+    padding-bottom: 5px;
+    position: relative;
+}
+
+#contactusHeader::before{
+    content: "";
+    position: absolute;
+    width: 50%;
+    height: 1px;
+    bottom: 0;
+    left: 25%;
+    border-bottom: 4px solid black;
+}
+
+.contact .heading h2 span {
+  color: hotpink;
+}
+
+.contact .heading p {
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.7;
+  color: #999999;
+  margin: 20px 0 60px;
+  padding: 0;
+}
+
+.contact .form-control {
+  padding: 25px;
+  font-size: 13px;
+  margin-bottom: 10px;
+  background: #edf6ff;
+  border-style: dashed;
+  border-radius: 10px;
+  border-color: hotpink;
+}
+
+.contact button.btn {
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 15px;
+  background: hotpink;
+  color: #ffffff;
+}
+
+.contact .contactdetails-title h3 {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.contact .contactdetails-title p {
+  font-size: 14px;
+  font-weight: 400;
+  color: #999;
+  line-height: 1.6;
+  margin: 0 0 40px;
+}
+
+.contact .content .info {
+  margin-top: 30px;
+}
+.contact .content .info i {
+  font-size: 30px;
+  padding: 0;
+  margin: 0;
+  color: #02434b;
+  margin-right: 20px;
+  text-align: center;
+  width: 20px;
+}
+.contact .content .info h4 {
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.contact .content .info h4 span {
+  font-size: 13px;
+  font-weight: 300;
+  color: #999999;
+}
+
+#form-identifier{
+  padding-bottom: 100px;
+}
