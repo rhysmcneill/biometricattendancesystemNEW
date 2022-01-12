@@ -32,5 +32,5 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(template_name='users/logout.html'), name='logout'),
     path('dashboard/', user_views.dashboard, name='dashboard'),
     path('admindashboard/', user_views.admindashboard, name='admindashboard'),
-    path('vidstream/', user_views.display_livefeed, name='vidStream')
+    path('vidstream/', user_views.add_photos, name='vidStream')
 ]
