@@ -20,7 +20,4 @@ from mainsite.views import home, howitworks, contactus
 
 urlpatterns = [
     path('loginUser', views.loginUser, name='login'),
-    path('home', home, name='home'),
-    path('/howitworks', howitworks, name='howitworks'),
-    path('/contactus', contactus),
 ]

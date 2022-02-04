@@ -16,14 +16,14 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth import views as auth_views
-from users.views import register # import for users app
+from users.views import register, train  # import for users app
 from users import views as user_views
 from mainsite.views import home, howitworks, contactus # Import for mainsite app
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('register/', user_views.register, name='register'),
-    path('home', home),
+    path('', home, name="home"),
     path('howitworks', howitworks, name="howitworks"),
     path('contactus', contactus, name="contactus"),
     path('users/', include('django.contrib.auth.urls')),
@@ -32,5 +32,6 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(template_name='users/logout.html'), name='logout'),
     path('dashboard/', user_views.dashboard, name='dashboard'),
     path('admindashboard/', user_views.admindashboard, name='admindashboard'),
-    path('vidstream/', user_views.add_photos, name='vidStream')
+    path('vidstream/', user_views.add_photos, name='vidStream'),
+    path('training/', user_views.training_dataset, name='training')
 ]
