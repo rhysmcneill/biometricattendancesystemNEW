@@ -4,12 +4,14 @@ from datetime import datetime, time
 import dlib
 import face_recognition
 import numpy as np
+from imutils import face_utils
 from matplotlib import pyplot as plt
 from sklearn.manifold import TSNE
 from sklearn.preprocessing import LabelEncoder
 from django.views.decorators.http import condition
 from sklearn.svm import SVC
-from sklearn.svm._libsvm import predict
+from sklearn.svm._libsvm import predict, predict_proba
+from sklearn.linear_model import LinearRegression
 from face_recognition.face_recognition_cli import image_files_in_folder
 from .forms import UserRegForm
 from django.contrib.auth import authenticate, login, logout
@@ -19,13 +21,7 @@ from django.shortcuts import render,redirect
 from django.contrib import messages
 from django.contrib.auth.models import User
 import cv2
-from django.views.decorators import gzip
-import threading
-import io
 import imutils
-from imutils import face_utils
-from imutils.video import VideoStream
-from imutils.face_utils import rect_to_bb
 from imutils.face_utils import FaceAligner
 import matplotlib
 # Create your views here.
@@ -86,28 +82,6 @@ def logout_view(request):
 
 def display_livefeed(request):
     return render(request, 'users/vidStream.html')
-
-class mycamera(object):
-
-    def __init__(self):
-        self.frames = cv2.VideoCapture(0)
-
-    def __del__(self):
-        self.frames.release()
-
-    def get_jpg_frame(self):
-        is_captured, frame = self.frames.read()
-        retval, jframe = cv2.imencode('.jpg', frame)
-        return jframe.tobytes()
-
-def livefeed():
-    camera_object = mycamera()
-    while True:
-        jframe_bytes = camera_object.get_jpg_frame()
-        yield (b'--frame\r\n'
-                b'Content-Type: image/jpeg\r\n\r\n' + jframe_bytes + b'\r\n\r\n')
-
-
 
 def create_dataset(username):
     id = username
@@ -209,6 +183,7 @@ def data_points(data_points, all_person_names):
         plt.scatter(all_data_points[idx, 0], all_data_points[idx, 1], label=names)
 
     plt.legend(bbox_to_anchor=(1, 1))
+    plt.title('Scatter graph for employee facial data', fontdict=None, loc='center',)
     matplotlib.rcParams.update({'figure.autolayout': True})
     plt.tight_layout()
     plt.savefig('users/static/users/images/training_visualisation.png')
@@ -281,5 +256,91 @@ def training_dataset(request):
         messages.warning(request, f'Error - please see logs for details.')
         return render(request, 'admindashboard')
 
+@login_required
+def face_recognition_mark_in(request):
+
+    # Detect face by loading HOG
+    print("[INFO] Loading the facial detector")
+    detector = dlib.get_frontal_face_detector()
+    predictor = dlib.shape_predictor('mainsite/templates/mainsite/shape_predictor_68_face_landmarks.dat')
+    support_vector_class_directory = "image_data/support_vector_class.sav"
+
+    with open(support_vector_class_directory, 'rb') as file:
+        support_vector_class = pickle.load(file)
+    fa = FaceAligner(predictor, desiredFaceWidth=100)
+    le = LabelEncoder()
+    le.classes_ = np.load('image_data/classification.npy')
+    encodings = np.zeros((1, 128))
+    all_faces = len(support_vector_class.predict_proba(encodings)[0])
+
+    count = dict()
+    is_present = dict()
+    current_time = dict()
+    start = dict()
+    for i in range(all_faces):
+        count[le.inverse_transform([i])[0]] = 0
+        is_present[le.inverse_transform([i])[0]] = False
+
+    # Initialise cv2 video stream
+    print("[INFO] Initializing Video stream")
+    video = cv2.VideoCapture(0)
 
 
+    # Capturing the faces one by one and detect the faces and showing it on the window
+    while (True):
+        # Capturing the image
+        # video.read each frame
+        _, img = video.read()
+        # Resize each image
+        img = imutils.resize(img, width=1000)
+        # convert img to grey for the ML Classifier to work
+        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        # This will detect all the images in the current frame, and it will return the coordinates of the faces
+        # Takes in image and some other parameter for accurate result
+        faces = detector(gray, 0)
+        # @faces - this ensures there can be multiple faces so we have to get each and every face and draw a rectangle around its
+
+        for face in faces:
+            print("INFO : inside for loop")
+            (x, y, w, h) = face_utils.rect_to_bb(face)
+
+            face_aligned = fa.align(img, gray, face)
+            cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 1)
+
+            (prediction, probability) = predict(face_aligned, support_vector_class)
+
+            if (prediction != [-1]):
+
+                    employee_name = le.inverse_transform(np.ravel([prediction]))[0] # Turns labels into original encoding
+                    prediction = employee_name
+                    if count[prediction] == 0:
+                        start[prediction] = time.time()
+                        count[prediction] = count.get(prediction, 0) + 1
+
+                    if count[prediction] == 4 and (time.time() - start[prediction]) > 1.2:
+                        count[prediction] = 0
+                    else:
+                        is_present[prediction] = True
+                        current_time[prediction] = datetime.datetime.now()
+                        count[prediction] = count.get(prediction, 0) + 1
+                        print(prediction, is_present[prediction], count[prediction])
+                    cv2.putText(img, str(employee_name) + str(probability), (x + 6, y + h - 6), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1)
+
+            else:
+                employee_name = "unknown"
+                cv2.putText(img, str(employee_name), (x + 6, y + h - 6), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1)
+
+        # Showing the image in another window
+        # Creates a window with window name "Mark Attendance - In - Press q to exit" and with the image img
+        cv2.imshow("Mark Attendance - In - Press q to exit", img)
+        # Before closing it we need to give a wait command, otherwise the open cv wont work
+        # @params with the millisecond of delay 1
+        # cv2.waitKey(1)
+        # To get out of the loop
+        key = cv2.waitKey(50) & 0xFF
+        if (key == ord("q")):
+            break
+
+    # Stoping the videostream
+    # destroying all the windows
+    cv2.destroyAllWindows()

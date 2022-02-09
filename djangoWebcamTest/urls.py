@@ -33,5 +33,7 @@ urlpatterns = [
     path('dashboard/', user_views.dashboard, name='dashboard'),
     path('admindashboard/', user_views.admindashboard, name='admindashboard'),
     path('vidstream/', user_views.add_photos, name='vidStream'),
-    path('training/', user_views.training_dataset, name='training')
+    path('training/', user_views.training_dataset, name='training'),
+    path('attendancein/', user_views.face_recognition, name='attendancein')
+
 ]

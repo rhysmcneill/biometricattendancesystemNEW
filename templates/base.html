@@ -73,7 +73,7 @@
       </nav>
   </header>
   <body>
-    <!-- Creates error message if invalid credentials are entered when logging into the system -->
+    <!-- Creates error/success messages at top of page -->
     {% if messages %}
         {% for message in messages %}
             <div class="alert alert-{{ message.tags }}">
