@@ -261,6 +261,7 @@ def face_recognition_mark_in(request):
     count = dict()
     is_present = dict()
     current_time = dict()
+    username = request.user.username
 
     # Gets all the personnel within the system
     for person_name in os.listdir(dataset_directory):
@@ -294,15 +295,15 @@ def face_recognition_mark_in(request):
                 cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 3)
                 # If prediction < 80 then dont mark employee in - < 80% is not valid
                 if prediction[1] < 80:
-                    count[employee] = 0
+                    count[username] = 0
                 # If prediction <= 120 and > 80 then mark employee in - > 80% is valid
-                elif prediction[0] <= 120:
+                elif prediction[1] <= 120:
                     cv2.putText(frame, '% s - %.0f' %
                                 (name[prediction[0]], prediction[1]), (x - 10, y - 10),
                                 cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0))
-                    is_present[employee] = True
-                    current_time[employee] = datetime.now()
-                    count[employee] = count.get(employee, 0) + 1
+                    is_present[username] = True
+                    current_time[username] = datetime.now()
+                    count[username] = count.get(username, 0) + 1
                 else:
                     cv2.putText(frame, 'Unknown Entity',
                                 (x - 10, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0))
@@ -347,15 +348,15 @@ def update_db_attendance_in(present):
 
         if attendance is None:
             if present[employee] == True:
-                a = is_Present(user=user, date=today, present=True)
+                a = is_Present(user=user, date=today, is_present=True)
                 a.save()
             else:
-                a = is_Present(user=user, date=today, present=False)
+                a = is_Present(user=user, date=today, is_present=False)
                 a.save()
         else:
             if present[employee] == True:
                 attendance.present = True
-                attendance.save(update_fields=['present'])
+                attendance.save(update_fields=['is_present'])
         if present[employee] == True:
-            a = clocked_Time(user=user, date=today, time=time, out=False)
+            a = clocked_Time(user=user, date=today, time=time, signed_out=False)
             a.save()
